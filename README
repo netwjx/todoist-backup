@@ -1,5 +1,5 @@
 todoist-backup
 
-todoist.com �ı��ݹ���
+todoist.com 的备份工具
 
-Ŀǰֻ�ƻ�ͨ��firefox��չʵ�ֱ���,��������ʽΪ�ʺ����Ķ���json��ʽ,��������,�ո��
+目前只计划通过firefox扩展实现备份,并美化格式为适合人阅读的json格式,包含缩进,空格等
