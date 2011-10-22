@@ -1,13 +1,20 @@
-const widgets = require("widget");
-const tabs = require("tabs");
+var pageMod = require('page-mod'),
+    data = require('self').data;
 
-var widget = widgets.Widget({
-  id: "mozilla-link",
-  label: "Mozilla website",
-  contentURL: "http://www.mozilla.org/favicon.ico",
-  onClick: function() {
-    tabs.open("http://www.mozilla.org/");
-  }
+pageMod.PageMod({
+    include: 'http://todoist.com/app*',
+    contentScriptWhen: 'ready',
+    contentScriptFile: data.url('initContentScript.js'),
+    onAttach: function(w){
+        w.port.on('backup', backup);
+    }
 });
 
-console.log("The add-on is running.");
+console.debug('The todoist-backup add-on is running.');
+
+
+function backup(p){
+    console.debug('start backup');
+    // TODO
+    this.emit('backup_completed', {path:'foo bar'});
+}

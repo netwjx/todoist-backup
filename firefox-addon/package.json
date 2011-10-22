@@ -1,8 +1,9 @@
 {
-  "name": "todoist-backup-add-on",
-  "fullName": "todoist.com backup add-on",
-  "description": "todoist.com backup to json, beautiful style.",
-  "author": "",
-  "license": "MPL 1.1/GPL 2.0/LGPL 2.1",
-  "version": "0.1"
+    "name": "todoist-backup-add-on", 
+    "license": "MPL 1.1/GPL 2.0/LGPL 2.1", 
+    "author": "netwjx(at)gmail", 
+    "version": "0.1", 
+    "fullName": "todoist.com backup add-on", 
+    "id": "jid1-HRHVEtoQiuS5Yg", 
+    "description": "todoist.com backup to json, beautiful style."
 }
