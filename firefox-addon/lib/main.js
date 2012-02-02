@@ -93,6 +93,7 @@ pageMod.PageMod({
     }
 });
 
+/*
 try{
     const devmode = require('development-mode/main');
     if(devmode){
@@ -103,3 +104,4 @@ try{
         console.debug('The todoist-backup add-on is running.');
     }
 }catch(e){}
+*/
