@@ -1,6 +1,7 @@
 function portOn(port, options){
     port.on('commonPortOn', function(arg){
         var e = arg.event, args = arg.args, token = arg.token;
+        //console.debug('portOn ' + JSON.stringify(arg).slice(0,240) + ' ...');
         var done = function(){
             port.emit('commonPortOnCallback', {token:token, args:Array.prototype.slice.call(arguments)});
         };
@@ -9,16 +10,22 @@ function portOn(port, options){
         }else if(e && options[e]){
             options[e].apply({
                 done:done
-            },args);
+            }, args);
         } 
     });
 }
 
 ///////////////////////////////////////////////////////////////////////////////
 
+const {Cc,Ci} = require('chrome');
+
 const pageMod = require('page-mod'),
+    ss = require("simple-storage"),
     notifications = require('notifications'),
-    self = require('self');
+    self = require('self'),
+    file = require('file'),
+    nsIFilePicker = Ci.nsIFilePicker;
+    js_beautify = require("beautify").js_beautify;
 
 pageMod.PageMod({
     include: 'http://todoist.com/app*',
@@ -34,6 +41,51 @@ pageMod.PageMod({
                 notifications.notify({
                     title: '\u53d1\u751f\u9519\u8bef',
                     text: msg
+                });
+                this.done();
+            },
+            chooseBackupPath: function(){
+                var f, fp = Cc['@mozilla.org/filepicker;1'].createInstance(nsIFilePicker);
+                var parent = Cc['@mozilla.org/appshell/window-mediator;1'].getService(Ci.nsIWindowMediator).getMostRecentWindow(null),
+                    date = new Date(), defaultDir = ss.storage.defaultDir;
+                fp.init(parent, '\u9009\u62e9\u5907\u4efd\u6587\u4ef6\u8def\u5f84', nsIFilePicker.modeSave);
+                fp.appendFilter('todoist json \u5907\u4efd\u6587\u4ef6(*.json)', '*.json');
+                fp.defaultExtension = 'json';
+                fp.defaultString = 'todoist_backup' + 
+                    date.getFullYear() + 
+                    (date.getMonth() + 1 + '').replace(/^\d$/, '0$&') +
+                    (date.getDate() + '').replace(/^\d$/, '0$&') +
+                    '_' +
+                    (date.getHours() + '').replace(/^\d$/, '0$&') +
+                    (date.getMinutes() + '').replace(/^\d$/, '0$&') +
+                    (date.getSeconds() + '').replace(/^\d$/, '0$&');
+                if(defaultDir){
+                    f = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
+                    f.initWithPath(defaultDir);
+                    fp.displayDirectory(f);
+                }
+                var ret = fp.show();
+                if(ret === nsIFilePicker.returnOK || ret === nsIFilePicker.returnReplace){
+                    f = fp.file;
+                    ss.storage.defaultDir = f.parent.path;
+                    this.done(f.path);
+                }
+                fp = parent = null;
+            },
+            saveToFile: function(ctx){
+                var str = js_beautify(JSON.stringify(ctx.projects));
+                //console.debug(str);
+                var writer = file.open(ctx.path, 'w');
+                try{
+                    writer.write(str);
+                }finally{
+                    writer.close();
+                    writer = null;
+                }
+
+                notifications.notify({
+                    title:'\u5907\u4efd\u5b8c\u6210',
+                    text:'\u5df2\u5c06todoist\u5907\u4efd\u81f3' + ctx.path
                 });
                 this.done();
             }
