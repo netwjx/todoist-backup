@@ -62,7 +62,7 @@ pageMod.PageMod({
                 if(defaultDir){
                     f = Cc['@mozilla.org/file/local;1'].createInstance(Ci.nsILocalFile);
                     f.initWithPath(defaultDir);
-                    fp.displayDirectory(f);
+                    fp.displayDirectory = f;
                 }
                 var ret = fp.show();
                 if(ret === nsIFilePicker.returnOK || ret === nsIFilePicker.returnReplace){
