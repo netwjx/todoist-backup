@@ -11,21 +11,14 @@
 
   class Port
     constructor: (@port)->
-      @timeout = 20
 
     emit: (type, args, callback)->
       if typeof args is 'function'
         [callback, args] = [args, []]
 
       if callback
-        cb = 'cb' + (+new Date())
-        offListener = @once cb, ->
-          clearTimeout cbTimer
-          callback.apply @, Array.prototype.slice.call arguments, 0
-        cbTimer = setTimeout ->
-          console.log "Auto remove emit listener with timeout: listener:#{ cb } source: #{ type }"
-          offListener()
-        , @timeout * 1000
+        cb = "cb#{ +new Date() }_#{ Math.random()*1000|0 }"
+        @once cb, callback
 
       @port.emit type, {cb, args}
 
