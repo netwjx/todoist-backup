@@ -20,7 +20,11 @@ module.exports = (grunt)->
           {
             expand: on
             cwd: 'src'
-            src: ['**/*', '!**/*.coffee', '!**/*.js']
+            src: [
+              '**/*'
+              '!**/*.coffee'
+              '!**/*.js'
+            ]
             dest: 'dest/'
           }
         ]
@@ -31,6 +35,17 @@ module.exports = (grunt)->
             cwd: 'dest/lib'
             src: 'common/**/*'
             dest: 'dest/data/'
+          }
+        ]
+      js:
+        files: [
+          {
+            expand: on
+            cwd: 'src'
+            src: [
+              'lib/beautify.js'
+            ]
+            dest: 'dest/'
           }
         ]
     unicode:
@@ -76,6 +91,7 @@ module.exports = (grunt)->
     'clean:js'
     'coffee'
     'copy:common'
+    'copy:js'
     'unicode'
   ]
 
