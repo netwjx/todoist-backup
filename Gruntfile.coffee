@@ -79,9 +79,10 @@ module.exports = (grunt)->
           execOptions:
             cwd: '.'
         command: [
+          'rm src/package.json src/README.md'
           'ln -s ../package.json src/package.json'
           'ln -s ../README.md src/README.md'
-        ].join '&&'
+        ].join ';'
 
   require('matchdep').filterDev('grunt-*').forEach grunt.loadNpmTasks
   
@@ -93,6 +94,13 @@ module.exports = (grunt)->
     'copy:common'
     'copy:js'
     'unicode'
+  ]
+  
+  grunt.registerTask 'xpi', [
+    'clean:dest'
+    'copy:main'
+    'generate'
+    'shell:xpi'
   ]
 
   grunt.registerTask 'default', [
