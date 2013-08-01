@@ -1,3 +1,5 @@
-
-/firefox-addon/todoist-backup-add-on.xpi
-/firefox-addon/pfdir
+node_modules
+src/**/*.js
+src/*.xpi
+.tmp
+dest/
