@@ -1,1 +1,0 @@
-@cfx run -p pfdir
