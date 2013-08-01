@@ -32,9 +32,6 @@
       ()=>
         @port.removeListener type, handle
 
-    # offListener: (type, listener)->
-    #   @port.removeListener type, listener
-
     once: (type, listener)->
       offListener = @on type, ->
         offListener()

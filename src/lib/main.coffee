@@ -83,12 +83,12 @@ pm.PageMod
               for p in data
                 do (p)->
                   queue.push (done)->
-                    api.getUncompletedItems p.id (data)->
+                    api.getUncompletedItems p.id, (data)->
                       console.log "Got project #{ p.name } uncompleted items"
                       p.uncompleted_items = data
                       done()
                   , (done)->
-                    api.getCompletedItems p.id (data)->
+                    api.getCompletedItems p.id, (data)->
                       console.log "Got project #{ p.name } completed items"
                       p.completed_items = data
                       done()
@@ -97,9 +97,12 @@ pm.PageMod
           queue.onfinish = ->
             console.log 'Got finished'
             if result
+              file = require 'file'
+              tabs = require 'tabs'
+
               text = (require './beautify').js_beautify JSON.stringify result
               try
-                ws = (require 'file').open path, 'w'
+                ws = file.open path, 'w'
                 ws.write text
               finally
                 ws?.close()
@@ -108,6 +111,8 @@ pm.PageMod
               notes.notify
                 title: '备份完成'
                 text: "路径: #{ path }"
+                onClick: ->
+                  tabs.open "file:///#{ file.dirname path }"
 
           queue.pop()
 
