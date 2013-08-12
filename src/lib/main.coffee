@@ -41,7 +41,17 @@ pm.PageMod
           nsIFilePicker.modeSave
         filePicker.appendFilter 'JSON (*.json)', '*.json'
         filePicker.defaultExtension = 'json'
-        filePicker.defaultString = "todoist_backup#{ new Date().toISOString().replace(/[-:]|(\.\d+Z$)/g, '').replace('T', '_') }"
+        d = new Date()
+        filePicker.defaultString = "todoist_backup#{
+          d.getFullYear() +
+          (d.getMonth() + 1 + '').replace(/^\d$/,'0$&') +
+          (d.getDate() + '').replace(/^\d$/,'0$&') +
+          '_' +
+          (d.getHours() + '').replace(/^\d$/,'0$&') +
+          (d.getMinutes() + '').replace(/^\d$/,'0$&') +
+          (d.getSeconds() + '').replace(/^\d$/,'0$&') +
+          '.json'
+          }"
         defaultDir = simplePrefs.prefs['defaultBackupDirectory']
         console.log 'openSaveFileDialog defaultDir:', defaultDir
         if defaultDir
